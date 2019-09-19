@@ -10,7 +10,7 @@ my_variables <-
 
 
 start_date <- "2006-01-01"
-end_date <- "2015-04-01"
+end_date <- "2019-04-01"
 
 
 my_model_data <- my_total_df[my_variables]
@@ -108,8 +108,9 @@ mbacktesting_results_df$rG10_RMSE <-
   (mbacktesting_results_df$rG10 - mbacktesting_results_df$rG10_PRED) ^ 2
 mbacktesting_results_df$rTB3_RMSE <-
   (mbacktesting_results_df$rTB3 - mbacktesting_results_df$rTB3_PRED) ^ 2
-mbacktesting_results_df$RMSE <-
-  vec_square_diff_rmse(mbacktesting_results_df)
+
+#mbacktesting_results_df$RMSE <-
+#  vec_square_diff_rmse(mbacktesting_results_df)
 
 mbacktesting_results_df$rUNEMP_NORM_RMSE <-
   (mbacktesting_results_df$rUNEMP) ^ 2
@@ -139,16 +140,17 @@ mbacktesting_results_df$rG10_NORM_RMSE <-
   (mbacktesting_results_df$rG10) ^ 2
 mbacktesting_results_df$rTB3_NORM_RMSE <-
   (mbacktesting_results_df$rTB3) ^ 2
-mbacktesting_results_df$NORM_RMSE <-
-  vec_norm_rmse(mbacktesting_results_df)
+
+#mbacktesting_results_df$NORM_RMSE <-
+#  vec_norm_rmse(mbacktesting_results_df)
 
 
-mbacktesting_results_df$L1_NORM <-
-  vec_l1_norm_rmse(mbacktesting_results_df)
-mbacktesting_results_df$ERROR <-
-  vec_diff_rmse(mbacktesting_results_df)
-mbacktesting_results_df$GLOBAL_PERCENT_ERROR <-
-  mbacktesting_results_df$ERROR / mbacktesting_results_df$L1_NORM
+#mbacktesting_results_df$L1_NORM <-
+#  vec_l1_norm_rmse(mbacktesting_results_df)
+#mbacktesting_results_df$ERROR <-
+#  vec_diff_rmse(mbacktesting_results_df)
+#mbacktesting_results_df$GLOBAL_PERCENT_ERROR <-
+#  mbacktesting_results_df$ERROR / mbacktesting_results_df$L1_NORM
 
 mbacktesting_results_df$L1_NORM_GDP <-
   abs(mbacktesting_results_df$rGDP)
