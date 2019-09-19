@@ -6,53 +6,69 @@ require(reshape2)
 require(vars)
 require(plyr)
 require(TTR)
+require(stats)
+require(PerformanceAnalytics)
 library("lubridate")
+
+
+fromRetToPrices <- function(x_ret) {
+  x_ret <- 1 + x_ret
+  x_ret <- c(100,x_ret)
+  # Compute future values
+  x_ret <- cumprod(x_ret)
+}
+
+
+#SP500 <- Quandl("YAHOO/INDEX_GSPC",api_key="dTxPoUr7KKcs6QaAAt5K")
+SP500 <- Quandl("MULTPL/SP500_REAL_PRICE_MONTH", api_key="dTxPoUr7KKcs6QaAAt5K")
+saveRDS(SP500, file = "SP500.rds")
+
 
 ###### Getting macro economic data from Quandl API
 ##### Getting data from the federal reserve
 
-COE = Quandl("FRED/COE", start_date = "1960-01-01",end_date = "2019-08-01",type ="xts")
+COE = Quandl("FRED/COE", start_date = "1960-01-01",end_date = "2019-09-01",type ="xts", api_key="dTxPoUr7KKcs6QaAAt5K")
 CPIAUCSL = Quandl(
-  "FRED/CPIAUCSL", start_date = "1960-01-01",end_date = "2019-08-01",type =
-    "xts"
+  "FRED/CPIAUCSL", start_date = "1960-01-01",end_date = "2019-09-01",type =
+    "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 FEDFUNDS = Quandl(
-  "FRED/FEDFUNDS", start_date = "1960-01-01",end_date = "2019-08-01",type =
-    "xts"
+  "FRED/FEDFUNDS", start_date = "1960-01-01",end_date = "2019-09-01",type =
+    "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
-GCE = Quandl("FRED/GCE", start_date = "1960-01-01",end_date = "2019-08-01",type =
-               "xts")
-GDP = Quandl("FRED/GDP", start_date = "1960-01-01",end_date = "2019-08-01",type =
-               "xts")
+GCE = Quandl("FRED/GCE", start_date = "1960-01-01",end_date = "2019-09-01",type =
+               "xts", api_key="dTxPoUr7KKcs6QaAAt5K")
+GDP = Quandl("FRED/GDP", start_date = "1960-01-01",end_date = "2019-09-01",type =
+               "xts", api_key="dTxPoUr7KKcs6QaAAt5K")
 GDPDEF = Quandl(
-  "FRED/GDPDEF", start_date = "1960-01-01",end_date = "2019-08-01",type =
-    "xts"
+  "FRED/GDPDEF", start_date = "1960-01-01",end_date = "2019-09-01",type =
+    "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 GPDI = Quandl(
-  "FRED/GPDI", start_date = "1960-01-01",end_date = "2019-08-01",type = "xts"
+  "FRED/GPDI", start_date = "1960-01-01",end_date = "2019-09-01",type = "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 GS10 = Quandl(
-  "FRED/GS10", start_date = "1960-01-01",end_date = "2019-08-01",type = "xts"
+  "FRED/GS10", start_date = "1960-01-01",end_date = "2019-09-01",type = "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 HOANBS = Quandl(
-  "FRED/HOANBS", start_date = "1960-01-01",end_date = "2019-08-01",type =
-    "xts"
+  "FRED/HOANBS", start_date = "1960-01-01",end_date = "2019-09-01",type =
+    "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 M1SL = Quandl(
-  "FRED/M1SL", start_date = "1960-01-01",end_date = "2019-08-01",type = "xts"
+  "FRED/M1SL", start_date = "1960-01-01",end_date = "2019-09-01",type = "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 M2SL = Quandl(
-  "FRED/M2SL", start_date = "1960-01-01",end_date = "2019-08-01",type = "xts"
+  "FRED/M2SL", start_date = "1960-01-01",end_date = "2019-09-01",type = "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 PCEC = Quandl(
-  "FRED/PCEC", start_date = "1960-01-01",end_date = "2019-08-01",type = "xts"
+  "FRED/PCEC", start_date = "1960-01-01",end_date = "2019-09-01",type = "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 TB3MS = Quandl(
-  "FRED/TB3MS", start_date = "1960-01-01",end_date = "2019-08-01",type = "xts"
+  "FRED/TB3MS", start_date = "1960-01-01",end_date = "2019-09-01",type = "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 UNRATE = Quandl(
-  "FRED/UNRATE", start_date = "1960-01-01",end_date = "2019-08-01",type =
-    "xts"
+  "FRED/UNRATE", start_date = "1960-01-01",end_date = "2019-09-01",type =
+    "xts", api_key="dTxPoUr7KKcs6QaAAt5K"
 )
 
 #### Getting all quaterly data into a single data frame
@@ -125,7 +141,7 @@ colnames(my_final_quandl_monthly_df) <-
   )
 
 ### Saving our monthly macro data frame
-SaveDataFrame(my_final_quandl_monthly_df,outputDataPath,"my_final_quandl_monthly_df")
+#SaveDataFrame(my_final_quandl_monthly_df,outputDataPath,"my_final_quandl_monthly_df")
 
 ##### Preprocessing the data to get returns
 ####### Differencing our series : we model the log return which are stationary
@@ -147,6 +163,9 @@ rG10 = 0.01 * (my_final_quandl_monthly_df$GS10)
 rTB3 = 0.01 * (my_final_quandl_monthly_df$TB3MS)
 #Integrated rates
 FED = fromRetToPrices(0.25 * rFED)
+
+
+
 FED = log(FED[-1])
 G10 = fromRetToPrices(0.25 * rG10)
 G10 = log(G10[-1])
@@ -209,9 +228,10 @@ my_final_int_mdf <- data.frame(
 ## Saving the two finally processed time series
 #SaveDataFrame(my_final_mdf,outputDataPath,"my_final_mdf")
 
-saveRDS(my_final_int_mdf, file = "my_final_mdf")
+saveRDS(my_final_int_mdf, file = "my_final_int_mdf.rds")
+saveRDS(my_final_mdf, file = "my_final_mdf.rds")
 
-SP500 <- Quandl("YAHOO/INDEX_GSPC", authcode="gustKaxRreyXoTGyMq9D")
-saveRDS(my_final_int_mdf, file = "my_final_mdf")
 
-# SaveDataFrame(SP500,inputDataPath,"SP500")
+
+
+

@@ -15,7 +15,7 @@ my_interpolated_SP500 <- data.frame(DATES = DateSeq, rSP500 = rSP500)
 # loading the previously saved data frames for macro economic data
 #my_final_df <-
 #  readRDS(paste(outputDataPath,"my_final_mdf.rds", sep = ""))
-my_final_df <- readRDS("my_final_mdf.rds", sep = "")
+my_final_df <- readRDS("my_final_mdf.rds")
 
 ###### Merging SP500
 my_merged_df <-merge(x=my_final_df, y=my_interpolated_SP500, by ='DATES', all.x = TRUE)
